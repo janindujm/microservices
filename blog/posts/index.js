@@ -2,9 +2,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const {randomBytes} = require('crypto');
+const cors = require('cors'); // Importing CORS middleware
 
 const app = express();
 app.use(bodyParser.json()); // Middleware to parse JSON request body
+app.use(cors()); // Enable CORS for all routes
 
 const posts = {};
 

@@ -1,11 +1,13 @@
 const express = require('express'); 
 const bodyParser = require('body-parser'); // Middleware to parse JSON request body
 const {randomBytes} = require('crypto'); // For generating random IDs
+const cors = require('cors'); // Importing CORS middleware
 
 
 
 const app =express(); // Create an Express application
 app.use(bodyParser.json()); // Middleware to parse JSON request body
+app.use(cors()); // Enable CORS for all routes
 
 const commentsByPostId = {}; // Object to store comments by post ID
 
