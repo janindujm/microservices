@@ -19,6 +19,7 @@ export default ({postID}) => {
 return <div>
     <form onSubmit={onSubmit}>
         <div className="form-group">
+        
             <label>New Comment</label>
             <input
                 value={comment}
@@ -26,6 +27,7 @@ return <div>
                 className="form-control"
             />
         </div>
+        <hr/>
         <button className="btn btn-primary">Submit</button>
     </form>
 </div>;

@@ -11,7 +11,7 @@ const App = () => {
       <hr />
       <h1>Posts</h1>
       <PostList />
-      <CommentList />
+      
 
     </div>
   );
