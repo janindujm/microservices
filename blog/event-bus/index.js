@@ -16,7 +16,7 @@ app.use(bodyParser.json()); // Middleware to parse JSON request body
     axios.post('http://localhost:3001/events', event).catch((err) => {
         console.error('Error sending event to comments service:', err.message); // Log any errors
     });
-    axios.post('http://localhost:3002/events', event).catch((err) => {
+    axios.post('http://localhost:3003/events', event).catch((err) => {
         console.error('Error sending event to query service:', err.message); // Log any errors
     });
 
