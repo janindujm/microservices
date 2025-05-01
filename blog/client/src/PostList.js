@@ -1,5 +1,7 @@
 import React,{useState , useEffect} from "react";
 import axios from "axios";
+import CommentCreate from "./CommentCreate";
+import CommentList from "./CommentList";
 
 
 
@@ -26,7 +28,11 @@ const fetchPosts = async () => {
 
             <div className="card-body">
                 <h3>{post.title}</h3>
-               <button className="btn btn-primary">View Comments</button>
+                <CommentCreate postID={post.id} />
+                <h4>Comments</h4>
+                <CommentList postID={post.id} />
+    
+               
 
             </div>
         </div>

@@ -5,7 +5,7 @@ const PostCreate = () => {
   const [title, setTitle] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission behavior
 
     await axios.post("http://localhost:3000/posts", {
       title,
