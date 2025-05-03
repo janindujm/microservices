@@ -1,6 +1,7 @@
 const express = require('express'); // Importing Express framework
 const bodyParser = require('body-parser'); // Middleware to parse JSON request body
 const cors = require('cors'); // Importing CORS middleware 
+const axios = require('axios'); // For making HTTP requests
 
 
 const app = express(); // Create an Express application
@@ -9,15 +10,7 @@ app.use(cors()); // Enable CORS for all routes
 
 const posts = {}; // Object to store posts
 
-
-app.get('/posts', (req, res) => { // Endpoint to get all posts
-  res.send(posts); // Send the posts object as the response
-});
-
-app.post('/events', (req, res) => { // Endpoint to handle incoming events
-    
-  const { type, data } = req.body; // Extract type and data from the request body
-  console.log('Received Event', type); // Log the received event type
+const handleEvent =(type, data) => {
 
   if (type === 'PostCreated') { // If the event is of type PostCreated
     const { id, title } = data; // Extract id and title from the event data
@@ -53,10 +46,34 @@ app.post('/events', (req, res) => { // Endpoint to handle incoming events
             console.warn(`Post with ID ${postId} not found. Skipping comment update.`);
         }
     }
+}
+
+
+app.get('/posts', (req, res) => { // Endpoint to get all posts
+  res.send(posts); // Send the posts object as the response
+});
+
+app.post('/events', (req, res) => { // Endpoint to handle incoming events
+    
+  const { type, data } = req.body; // Extract type and data from the request body
+  console.log('Received Event', type); // Log the received event type
+
+  handleEvent(type, data); // Call the handleEvent function to process the event
   
     res.send({}); // Send an empty response back to the client
 });
 
-app.listen(3003, () => { // Start the server on port 3002
-  console.log('Server is running on port 3003'); // Log a message indicating the server is running
+app.listen(3003, async() => { // Start the server on port 3002
+  console.log("Listening on 3003");
+  try {
+    const res = await axios.get("http://localhost:3005/events");
+ 
+    for (let event of res.data) {
+      console.log("Processing event:", event.type);
+ 
+      handleEvent(event.type, event.data);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
 }); // Start the server on port 3002
