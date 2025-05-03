@@ -24,7 +24,7 @@ app.post('/posts/:id/comments',async (req, res) => { // Create a new comment for
     const {id} = req.params; // Extract post ID from request parameters
     
     const comments = commentsByPostId[id] || []; // Get existing comments for the post or initialize an empty array
-    comments.push({id: commentId, content}); // Add the new comment to the array
+    comments.push({id: commentId, content, status:'pending' }); // Add the new comment to the array
 
 
     commentsByPostId[id] = comments; // Update the comments object
@@ -34,8 +34,11 @@ app.post('/posts/:id/comments',async (req, res) => { // Create a new comment for
         data:{
             id:commentId,
             content,
-            postId: req.params.id
+            postId: req.params.id,
+            status: 'pending' // Set the initial status of the comment to 'pending' 
+
         }
+
 
     })
     
@@ -43,8 +46,34 @@ app.post('/posts/:id/comments',async (req, res) => { // Create a new comment for
 }); // Create a new comment for a specific post
 
 
-app.post('/events', (req,res) => {
+app.post('/events', async (req,res) => {
   console.log('Received Event', req.body.type);
+
+    if (req.body.type === 'CommentModerated') { // If the event is of type CommentModerated
+        console.log('Comment Moderated Event:', req.body.data); // Log the comment moderated event
+        const {id, postId, status,content} = req.body.data; // Extract id, postId, status, and content from the event data
+        const comments = commentsByPostId[postId]; // Get the comments for the post
+
+
+        const comment = comments.find(comment => {
+            return comment.id === id; // Find the comment with the matching ID
+        });
+
+        comment.status = status; // Update the status of the comment
+
+        await axios.post('http://localhost:3005/events', {
+            type: 'CommentUpdated',
+            data: {
+                id,
+                status,
+                postId,
+                content
+            }
+        }).catch((err) => {
+            console.error('Error sending event to event bus:', err.message); // Log any errors
+        });
+    }
+
   res.send({});
 });
 

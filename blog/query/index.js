@@ -25,14 +25,32 @@ app.post('/events', (req, res) => { // Endpoint to handle incoming events
   }
 
   if (type === 'CommentCreated') { // If the event is of type CommentCreated
-    const { id, content, postId } = data; // Extract id, content, and postId from the event data
+    const { id, content, postId, status } = data; // Extract id, content, and postId from the event data
     const post = posts[postId]; // Get the post associated with the comment
 
         // 🛡️ Check if post exists
         if (post) {
-            post.comments.push({ id, content });
+            post.comments.push({ id, content , status});
           } else {
             console.warn(`Post with ID ${postId} not found. Skipping comment.`);
+        }
+    }
+  
+  if (type === 'CommentUpdated') { // If the event is of type CommentUpdated  
+    const { id, content, postId, status } = data; // Extract id, content, and postId from the event data
+    const post = posts[postId]; // Get the post associated with the comment
+
+        // 🛡️ Check if post exists
+        if (post) {
+            const comment = post.comments.find(comment => comment.id === id); // Find the comment with the matching ID
+            if (comment) {
+                comment.status = status; // Update the status of the comment
+                comment.content = content; // Update the content of the comment
+            } else {
+                console.warn(`Comment with ID ${id} not found in post ${postId}.`);
+            }
+        } else {
+            console.warn(`Post with ID ${postId} not found. Skipping comment update.`);
         }
     }
   
