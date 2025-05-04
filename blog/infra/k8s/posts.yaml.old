@@ -5,4 +5,4 @@ metadata:
 spec:
   containers:
     - name: posts
-      image: post-docker:1
+      image: post-docker
