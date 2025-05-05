@@ -14,7 +14,7 @@ app.post('/events', async (req, res) => {
         let status = data.content.includes('orange') ? 'rejected' : 'approved'; // Check if the content includes the word 'orange'
         const { id, postId, content } = data; // Extract id, postId, and content from the event data
 
-        await axios.post('http://localhost:3005/events', { // Send the moderated comment to the comments service
+        await axios.post('http://event-bus-srv:3005/events', { // Send the moderated comment to the comments service
             type: 'CommentModerated',
             data: {
                 id: id,
