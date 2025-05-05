@@ -16,21 +16,25 @@ app.get('/posts', (req, res) => {
   res.send(posts);
 }); 
 
-app.post('/posts',async (req, res) => {   // Create a new post
-  const id = randomBytes(4).toString('hex');   // Generate a random ID
-  const {title} = req.body; // Extract title from request body
+app.post('/posts', async (req, res) => {
+  const id = randomBytes(4).toString('hex');
+  const { title } = req.body;
 
-    posts[id] = {id, title}; // Store the new post in the posts object
+  posts[id] = { id, title };
 
-    await axios.post('http://localhost:3005/events', {
+  try {
+    await axios.post('http://event-bus-srv:3005/events', {
       type: 'PostCreated',
-      data: {
-        id, title
-      }
-    })
+      data: { id, title }
+    });
+    res.status(201).send(posts[id]);
+  } catch (error) {
+    console.error('Error sending event to event-bus:', error.message);
+    res.status(500).send({ error: 'Failed to send event to event-bus' });
+  }
 
-    res.status(201).send(posts[id]);      // Send a 201 Created response with the new post
-}); 
+});
+
 
 app.post('/events', (req,res) => {
   console.log('Received Event', req.body.type);

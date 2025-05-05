@@ -14,10 +14,10 @@ const events = []; // Array to store events
     events.push(event); // Store the event in the events array
 
     // Forward the event to other services (e.g., comments, posts, query)
-    axios.post('http://localhost:3000/events', event).catch((err) => {
+    axios.post('http://posts-clusterip-srv:3000/events', event).catch((err) => {
         console.error('Error sending event to posts service:', err.message); // Log any errors
     });
-    axios.post('http://localhost:3001/events', event).catch((err) => {
+    /*axios.post('http://localhost:3001/events', event).catch((err) => {
         console.error('Error sending event to comments service:', err.message); // Log any errors
     });
     axios.post('http://localhost:3003/events', event).catch((err) => {
@@ -25,7 +25,7 @@ const events = []; // Array to store events
     });
     axios.post("http://localhost:3004/events", event).catch((err) => {
         console.log('Error sending event to moderation service:',err.message);
-      });
+      });*/
 
     res.send({status: 'OK'}); // Send a response back to the client
 
