@@ -5,9 +5,9 @@ const PostCreate = () => {
   const [title, setTitle] = useState("");
 
   const onSubmit = async (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior
+    event.preventDefault();
 
-    await axios.post("http://localhost:3000/posts", {
+    await axios.post("http://posts.com/posts", {
       title,
     });
 
@@ -25,8 +25,7 @@ const PostCreate = () => {
             className="form-control"
           />
         </div>
-        
-        <button className="btn btn-primary mt-3" >Submit</button>
+        <button className="btn btn-primary mt-3">Submit</button>
       </form>
     </div>
   );
